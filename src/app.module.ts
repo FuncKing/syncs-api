@@ -4,15 +4,16 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { User } from './user/user.entity';
+require('dotenv').config();
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      host: 'localhost',
-      database: 'firstdb',
+      host: process.env.DATABASE_HOST,
+      database: process.env.DATABASE,
       entities: [User],
-      synchronize: true,
+      synchronize: (process.env.DATABASE_SYNCHRONIZE.toLowerCase() === 'true' ),
     }),
     UserModule
   ],/*
