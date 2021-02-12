@@ -6,6 +6,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
+require('dotenv').config();
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -13,17 +14,18 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
   //app.useGlobalPipes(new ValidationPipe());
-  const options = new DocumentBuilder()
-  .setTitle('User example')
-  .setDescription('The user API description')
-  .setVersion('1.0')
-  .addTag('user')
-  .addBearerAuth()
-  .build();
-const document = SwaggerModule.createDocument(app, options);
-SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+  const options = new DocumentBuilder()
+    .setTitle('User example')
+    .setDescription('The user API description')
+    .setVersion('1.0')
+    .addTag('user')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api', app, document);
+  
+  await app.listen(process.env.APP_PORT);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
