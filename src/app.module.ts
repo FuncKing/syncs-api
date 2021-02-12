@@ -13,11 +13,11 @@ require('dotenv').config();
       host: process.env.DATABASE_HOST,
       database: process.env.DATABASE,
       entities: [User],
-      synchronize: (process.env.DATABASE_SYNCHRONIZE.toLowerCase() === 'true' ),
+      synchronize: process.env.DATABASE_SYNCHRONIZE.toLowerCase() === 'true',
     }),
-    UserModule
-  ],/*
+    UserModule,
+  ],
   controllers: [AppController],
-  providers: [AppService],*/
+  providers: [AppService],
 })
 export class AppModule {}

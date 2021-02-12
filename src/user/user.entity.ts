@@ -18,7 +18,7 @@ export class User {
   password_hash: string;
 
   @Column()
-  password_salt: string
+  password_salt: string;
 
   @Column()
   isAccountActive: boolean;
