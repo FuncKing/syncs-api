@@ -1,42 +1,42 @@
-import crypto from 'crypto';
-import { SECRET_KEY } from '../constant/constant';
-import makeSalt from './makeSalt';
+import * as crypto from 'crypto';
 
-export const encrypt = (data, cryptType = 'sha256', secret = SECRET_KEY, encoding = 'hex') => (
-  crypto.createHmac(cryptType, secret)
-    .update(data)
-    .digest("hex")
-);
+export default class Encryption {
+  public hashed: string;
 
-export const intToBase36 = (timestamp) => timestamp.toString(36);
+  public saltLength: number = 20;
 
-export const base36ToInt = (timestamp) => parseInt(timestamp, 36);
+  public salt: string;
 
-export const b64Encode = (value) => Buffer.from((value).toString()).toString('base64');
+  private text?: string;
 
-export const b64Decode = (b64value) => Buffer.from(b64value, 'base64').toString();
+  private secret: string = process.env.SECRET;
 
-export const makeSha512 = (password, salt) => {
-  const hash = crypto.createHmac('sha512', salt); /** Hashing algorithm sha512 */
-  hash.update(password);
+  private cryptAlgorithm: string = 'sha512';
 
-  return hash.digest('hex');
-};
+  constructor(text?: string, salt?: string, saltLength?: number) {
+    this.saltLength = saltLength || this.saltLength;
+    this.text = text;
+    this.salt = salt || this.generateSalt(this.saltLength);
+    this.hashed = this.hash();
+  }
 
-export const createSaltHashPassword = (password) => {
-  const salt = makeSalt(12);
-  const hash = makeSha512(password, salt);
+  generateSalt(length: number): string {
+    return crypto
+      .randomBytes(Math.ceil(length / 2))
+      .toString('hex')
+      .slice(0, length);
+  }
 
-  return {
-    salt,
-    hash,
-  };
-};
+  hash(): string {
+    const hashed = crypto.createHmac(
+      this.cryptAlgorithm,
+      this.salt,
+    );
 
-export default {
-  encrypt,
-  intToBase36,
-  base36ToInt,
-  b64Encode,
-  b64Decode,
-};
+    hashed.update(this.text);
+
+    this.hashed = hashed.digest('hex');
+
+    return this.hashed;
+  }
+}

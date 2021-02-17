@@ -8,19 +8,21 @@ import { UserService } from '../user/user.service'
 
 @Injectable()
 export class AuthenticationService {
-    constructor( private readonly userService: UserService ){}
+	constructor(private readonly userService: UserService) { }
 
-    async login(user : LoginUserDto): Promise<string> {
-        return 
-    }
+	async login(user: LoginUserDto): Promise<string> {
+		return
+	}
 
-    async register(user : RegisterUserDto): Promise<string> {
-       // await //this.userRepository.create(user)
-        return 
-    }
+	async register(user: RegisterUserDto): Promise<User> {
+		const isExist = await this.userService.findOne({ email: user.email })
+		if (isExist) {
+			return
+		}
+		return await this.userService.create(user)
+	}
 
-    async userInfo(id : string): Promise<string> {
-        const user = await this.userService.findOne(id);
-        return user.email
-    }
+	async userInfo(id: string): Promise<User> {
+		return await this.userService.findById(id);
+	}
 }

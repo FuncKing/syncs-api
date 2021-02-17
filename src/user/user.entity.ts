@@ -34,7 +34,7 @@ export class User extends BaseEntity {
 
   setPassword(password: string): void {
     const encryption: Encryption = new Encryption(password);
-    this.password_hash = encryption.hashed;
     this.password_salt = encryption.salt;
+    this.password_hash = encryption.hashed;
   }
 }
