@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { User } from './user/user.entity';
+import { AuthenticationModule } from './authentication/authentication.module';
 require('dotenv').config();
 
 @Module({
@@ -16,6 +17,7 @@ require('dotenv').config();
       synchronize: process.env.DATABASE_SYNCHRONIZE.toLowerCase() === 'true',
     }),
     UserModule,
+    AuthenticationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

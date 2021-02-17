@@ -1,12 +1,10 @@
-import { IsInt, IsString } from 'class-validator';
+import * as AllValidator from 'class-validator';
+import { DrivePlan } from '../drive.plan.entity';
 
-export class CreateCatDto {
-  @IsString()
-  readonly name: string;
+export class CreateUserDto {
+  @AllValidator.IsString()
+  readonly email: string;
 
-  @IsInt()
-  readonly age: number;
-
-  @IsString()
-  readonly breed: string;
+  @AllValidator.IsString()
+  readonly password: string;
 }

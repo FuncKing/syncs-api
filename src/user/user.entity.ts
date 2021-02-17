@@ -1,22 +1,20 @@
-import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, ObjectID, ObjectIdColumn, BaseEntity } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { DrivePlan } from './drive.plan.entity';
+//import { Token } from 'src/token/token.entity';
+import Encryption from '../encryption' 
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
   @ObjectIdColumn()
   id: ObjectID;
 
   @Column()
-  @ApiProperty({ example: 'Mert Can', description: 'name' })
-  name: string;
-
-  @Column()
-  @ApiProperty({ example: 'Yılmaz', description: 'surname' })
-  surname: string;
-
-  @Column()
   @ApiProperty({ example: 'mymail@mail.com', description: 'email address' })
   email: string;
+
+  @Column("enum", { enum: DrivePlan})
+  selected_plan : DrivePlan;
 
   @Column()
   @ApiProperty({ example: 'asd230kd212', description: 'encoded password' })
@@ -28,5 +26,15 @@ export class User {
 
   @Column()
   @ApiProperty({ example: 'true', description: 'paranoid delete bool' })
-  isAccountActive: boolean;
+  is_account_active: boolean;
+/*
+  @Column()
+  @ApiProperty({ example: '', description: '' })
+  tokens: Token[];*/
+
+  setPassword(password: string): void {
+    const encryption: Encryption = new Encryption(password);
+    this.password_hash = encryption.hashed;
+    this.password_salt = encryption.salt;
+  }
 }
