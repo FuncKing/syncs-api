@@ -3,7 +3,7 @@ import * as crypto from 'crypto';
 export default class Encryption {
   public hashed: string;
 
-  public saltLength: number = 20;
+  public saltLength = 20;
 
   public salt: string;
 
@@ -11,7 +11,7 @@ export default class Encryption {
 
   private secret: string = process.env.SECRET;
 
-  private cryptAlgorithm: string = 'sha512';
+  private cryptAlgorithm = 'sha512';
 
   constructor(text?: string, salt?: string, saltLength?: number) {
     this.saltLength = saltLength || this.saltLength;
@@ -28,10 +28,7 @@ export default class Encryption {
   }
 
   hash(): string {
-    const hashed = crypto.createHmac(
-      this.cryptAlgorithm,
-      this.salt,
-    );
+    const hashed = crypto.createHmac(this.cryptAlgorithm, this.salt);
 
     hashed.update(this.text);
 
