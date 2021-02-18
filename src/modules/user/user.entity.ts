@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { DrivePlan } from './drive.plan.entity';
-import Encryption from '../encryption';
+import Encryption from '../../encryption';
 
 @Entity()
 export class User extends BaseEntity {

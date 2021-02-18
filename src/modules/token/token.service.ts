@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/user/user.entity';
+import { User } from 'src/modules/user/user.entity';
 import { ObjectID, Repository } from 'typeorm';
 import { Token } from './token.entity';
 
@@ -10,6 +10,10 @@ export class TokenService {
     @InjectRepository(Token)
     private readonly tokenRepository: Repository<Token>,
   ) {}
+
+  async findOne(where: object): Promise<Token> {
+    return this.tokenRepository.findOne(where);
+  }
 
   async create(user: User): Promise<Token> {
     const token = new Token();

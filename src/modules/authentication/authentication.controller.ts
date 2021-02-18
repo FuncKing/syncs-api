@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { User } from '../user/user.entity';
-import { LoginUserDto, RegisterUserDto } from './dto';
+import { LoginUserDto, MeDto, RegisterUserDto } from './dto';
 
-@Controller('authentication')
+@Controller('authentications')
 export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
 
@@ -18,7 +18,7 @@ export class AuthenticationController {
   }
 
   @Post('me')
-  getUser(@Body() req: any): Promise<User> {
-    return this.authenticationService.userInfo(req.id);
+  getUser(@Body() token: MeDto): Promise<User> {   
+    return this.authenticationService.userInfo(token.tokenValue);
   }
 }

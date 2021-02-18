@@ -1,12 +1,15 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
-import { User } from './user/user.entity';
-import { AuthenticationModule } from './authentication/authentication.module';
-import { TokenModule } from './token/token.module';
-import { Token } from './token/token.entity';
+import { UserModule } from './modules/user/user.module';
+import { User } from './modules/user/user.entity';
+import { AuthenticationModule } from './modules/authentication/authentication.module';
+import { TokenModule } from './modules/token/token.module';
+import { Token } from './modules/token/token.entity';
+import { UserController } from './modules/user/user.controller';
+import { AuthenticationMiddleware } from './common/middleware/authentication';
+
 require('dotenv').config();
 
 @Module({
@@ -25,4 +28,10 @@ require('dotenv').config();
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthenticationMiddleware)
+      .forRoutes({ path: '/*', method: RequestMethod.ALL });
+  }
+}

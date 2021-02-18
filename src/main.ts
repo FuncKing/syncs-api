@@ -6,6 +6,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
+//import { authenticationMiddleware } from './common/middleware/authentication';
 require('dotenv').config();
 
 async function bootstrap() {
@@ -25,6 +26,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
 
+  //app.use(authenticationMiddleware);
+  
   await app.listen(process.env.APP_PORT);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }

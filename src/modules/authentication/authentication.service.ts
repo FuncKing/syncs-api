@@ -3,7 +3,7 @@ import { User } from '../user/user.entity';
 import { LoginUserDto, RegisterUserDto } from './dto';
 import { UserService } from '../user/user.service';
 import { TokenService } from '../token/token.service';
-import { Token } from 'src/token/token.entity';
+import { Token } from 'src/modules/token/token.entity';
 
 @Injectable()
 export class AuthenticationService {
@@ -34,7 +34,12 @@ export class AuthenticationService {
     return await this.userService.create(user);
   }
 
-  async userInfo(id: string): Promise<User> {
-    return await this.userService.findById(id);
+  async userInfo(tokenValue: string): Promise<any> {
+    const token = await this.tokenService.findOne({value: tokenValue});
+    if(!token || ( token !== undefined ? new Date().getTime() > token.expiredAt.getTime() : false )){
+      return 'User not found or you do not have a permission';
+    }
+    const user = await this.userService.findById(token.userId)
+    return user
   }
 }
