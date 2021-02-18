@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { ObjectID, Repository } from 'typeorm';
 import { User } from '../user/user.entity';
 import { LoginUserDto, RegisterUserDto } from './dto';
 import { UserService } from '../user/user.service';
 import { TokenService } from '../token/token.service';
-import { table } from 'console';
+import { Token } from 'src/token/token.entity';
 
 @Injectable()
 export class AuthenticationService {
@@ -14,7 +12,7 @@ export class AuthenticationService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async login(user: LoginUserDto): Promise<string> {
+  async login(user: LoginUserDto): Promise<any> {
     const isExist = await this.userService.findOne({
       email: user.email,
     });
@@ -25,10 +23,8 @@ export class AuthenticationService {
     ) {
       return 'User not found!';
     }
-    const userId: string = (await isExist).password_hash.toString();
-    const token = await this.tokenService.create(userId);
-    console.table(token);
-    return token.value;
+    const userId: string = (await isExist).id.toString();
+    return await this.tokenService.create(userId);
   }
 
   async register(user: RegisterUserDto): Promise<any> {
