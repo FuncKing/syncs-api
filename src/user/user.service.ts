@@ -27,6 +27,8 @@ export class UserService {
     const user = new User();
     user.email = _user.email;
     user.setPassword(_user.password); 
+    user.selected_plan = 2
+    user.is_account_active = false
     await user.save();
     return user
   }

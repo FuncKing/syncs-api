@@ -1,8 +1,8 @@
-/*import { Column, Entity, ObjectID, ObjectIdColumn, Timestamp } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, ObjectID, ObjectIdColumn, Timestamp, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
-export class Token {
+export class Token extends BaseEntity {
   @ObjectIdColumn()
   id: ObjectID;
 
@@ -10,15 +10,14 @@ export class Token {
   @ApiProperty({ example: 'asdsadasd1231es', description: 'token value' })
   value: string;
 
-  @Column()
-  @ApiProperty({ example: '', description: '' })
-  created_at: Timestamp;
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date
+
+  @UpdateDateColumn({ type: 'timestamp', nullable: true, default : null   })
+  updatedAt?: Date
 
   @Column()
+  @DeleteDateColumn({ type: 'timestamp', nullable: true, default : null   })
   @ApiProperty({ example: '', description: '' })
-  updated_at: Timestamp;
-
-  @Column()
-  @ApiProperty({ example: '', description: '' })
-  deleted_at : Timestamp;
-}*/
+  deletedAt : Date;
+}

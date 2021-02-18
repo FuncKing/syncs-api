@@ -1,7 +1,6 @@
-import { Column, Entity, ObjectID, ObjectIdColumn, BaseEntity } from 'typeorm';
+import { Column, Entity, ObjectID, ObjectIdColumn, BaseEntity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { DrivePlan } from './drive.plan.entity';
-//import { Token } from 'src/token/token.entity';
 import Encryption from '../encryption' 
 
 @Entity()
@@ -27,10 +26,12 @@ export class User extends BaseEntity {
   @Column()
   @ApiProperty({ example: 'true', description: 'paranoid delete bool' })
   is_account_active: boolean;
-/*
-  @Column()
-  @ApiProperty({ example: '', description: '' })
-  tokens: Token[];*/
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date
+
+  @UpdateDateColumn({ type: 'timestamp', nullable: true, default: null  })
+  updatedAt: Date
 
   setPassword(password: string): void {
     const encryption: Encryption = new Encryption(password);

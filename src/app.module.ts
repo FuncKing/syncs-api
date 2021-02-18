@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { User } from './user/user.entity';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { TokenModule } from './token/token.module';
+import { Token } from './token/token.entity';
 require('dotenv').config();
 
 @Module({
@@ -13,11 +15,12 @@ require('dotenv').config();
       type: 'mongodb',
       host: process.env.DATABASE_HOST,
       database: process.env.DATABASE,
-      entities: [User],
       synchronize: process.env.DATABASE_SYNCHRONIZE.toLowerCase() === 'true',
+      entities: [User, Token],
     }),
     UserModule,
     AuthenticationModule,
+    TokenModule,
   ],
   controllers: [AppController],
   providers: [AppService],
