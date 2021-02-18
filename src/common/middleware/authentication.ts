@@ -11,7 +11,8 @@ export class AuthenticationMiddleware implements NestMiddleware {
   constructor(
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
-  ) {}
+  ) { }
+  
   async use(req: any, res: any, next: () => void) {
     const tokenValue = req.headers[`${TOKEN_KEY.toLowerCase()}`];
     let url = req.url;
@@ -20,8 +21,6 @@ export class AuthenticationMiddleware implements NestMiddleware {
     }
 
     const is_ignored = WHITE_LIST.findIndex((path) => path === url) > -1;
-
-    console.log(url, is_ignored);
 
     const token = await this.tokenService.findOne({ value: tokenValue });
     if (token) {
@@ -34,7 +33,9 @@ export class AuthenticationMiddleware implements NestMiddleware {
     }
 
     res.writeHead(403, { 'content-type': 'application/json' });
-    res.write(JSON.stringify({ test: 'test' }));
+    res.write(JSON.stringify({
+      message: 'You must be login to access here'
+    }));
     res.end();
   }
 }
