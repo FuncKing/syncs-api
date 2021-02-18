@@ -8,37 +8,33 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthenticationMiddleware implements NestMiddleware {
-
   constructor(
     private readonly userService: UserService,
-    private readonly tokenService: TokenService
-  ) { }
+    private readonly tokenService: TokenService,
+  ) {}
   async use(req: any, res: any, next: () => void) {
-    const tokenValue = req.headers[`${TOKEN_KEY.toLowerCase()}`]
+    const tokenValue = req.headers[`${TOKEN_KEY.toLowerCase()}`];
     let url = req.url;
     if (!url.endsWith('/')) {
       url += '/';
     }
 
-    const is_ignored = WHITE_LIST.findIndex(
-      (path) => path === url,
-    ) > -1;
+    const is_ignored = WHITE_LIST.findIndex((path) => path === url) > -1;
 
     console.log(url, is_ignored);
-    
 
-    const token = await this.tokenService.findOne({ value: tokenValue })
+    const token = await this.tokenService.findOne({ value: tokenValue });
     if (token) {
       const user = await this.userService.findById(token.userId);
-      if (user)
-        req.user = user
+      if (user) req.user = user;
     }
 
-    if (is_ignored || req.user) { return next(); }
+    if (is_ignored || req.user) {
+      return next();
+    }
 
-    res.writeHead(403, { 'content-type': 'application/json' })
-    res.write(JSON.stringify({ test: "test" }))
-    res.end()
-
+    res.writeHead(403, { 'content-type': 'application/json' });
+    res.write(JSON.stringify({ test: 'test' }));
+    res.end();
   }
 }

@@ -18,7 +18,7 @@ export class AuthenticationController {
   }
 
   @Post('me')
-  getUser(@Body() token: MeDto): Promise<User> {   
+  getUser(@Body() token: MeDto): Promise<User> {
     return this.authenticationService.userInfo(token.tokenValue);
   }
 }

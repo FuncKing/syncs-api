@@ -27,7 +27,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   //app.use(authenticationMiddleware);
-  
+
   await app.listen(process.env.APP_PORT);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }

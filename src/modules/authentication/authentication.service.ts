@@ -35,11 +35,16 @@ export class AuthenticationService {
   }
 
   async userInfo(tokenValue: string): Promise<any> {
-    const token = await this.tokenService.findOne({value: tokenValue});
-    if(!token || ( token !== undefined ? new Date().getTime() > token.expiredAt.getTime() : false )){
+    const token = await this.tokenService.findOne({ value: tokenValue });
+    if (
+      !token ||
+      (token !== undefined
+        ? new Date().getTime() > token.expiredAt.getTime()
+        : false)
+    ) {
       return 'User not found or you do not have a permission';
     }
-    const user = await this.userService.findById(token.userId)
-    return user
+    const user = await this.userService.findById(token.userId);
+    return user;
   }
 }
