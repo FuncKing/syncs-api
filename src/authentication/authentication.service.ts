@@ -23,8 +23,7 @@ export class AuthenticationService {
     ) {
       return 'User not found!';
     }
-    const userId: string = (await isExist).id.toString();
-    return await this.tokenService.create(userId);
+    return await this.tokenService.create(isExist);
   }
 
   async register(user: RegisterUserDto): Promise<any> {

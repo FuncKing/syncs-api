@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/user/user.entity';
 import { ObjectID, Repository } from 'typeorm';
 import { Token } from './token.entity';
 
@@ -10,10 +11,10 @@ export class TokenService {
     private readonly tokenRepository: Repository<Token>,
   ) {}
 
-  async create(userId: string): Promise<Token> {
+  async create(user: User): Promise<Token> {
     const token = new Token();
-    token.userId = userId;
-    token.setToken();
+    token.userId = user.id.toString();
+    token.generateToken(user);
     await token.save();
     return token;
   }

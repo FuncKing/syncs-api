@@ -10,6 +10,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { User } from 'src/user/user.entity';
+import Encryption from 'src/encryption';
 
 @Entity()
 export class Token extends BaseEntity {
@@ -24,6 +26,9 @@ export class Token extends BaseEntity {
   value: string;
 
   @Column()
+  expiredAt: Date;
+
+  @Column()
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
@@ -36,7 +41,15 @@ export class Token extends BaseEntity {
   @ApiProperty({ example: '', description: '' })
   deletedAt: Date;
 
-  setToken() {
-    this.value = 'my_token_value';
+  generateToken(user: User): void {
+    const expireDays = 30;
+    const key = `token-${user.email}-${new Date()}`;
+    const encryption: Encryption = new Encryption(key);
+    const now: Date = new Date();
+    now.setDate(now.getDate() + expireDays);
+
+    this.userId = user.id.toString();
+    this.value = encryption.hashed;
+    this.expiredAt = now;
   }
 }
