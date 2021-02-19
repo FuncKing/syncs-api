@@ -1,15 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '../user/user.entity';
 import { LoginUserDto, RegisterUserDto } from './dto';
 import { UserService } from '../user/user.service';
 import { TokenService } from '../token/token.service';
-import { Token } from 'src/modules/token/token.entity';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
     private readonly userService: UserService,
-    private readonly tokenService: TokenService,
+    private readonly tokenService: TokenService
   ) {}
 
   async login(user: LoginUserDto): Promise<any> {

@@ -12,9 +12,9 @@ import { User } from './modules/user/user.entity';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { TokenModule } from './modules/token/token.module';
 import { Token } from './modules/token/token.entity';
-import { UserController } from './modules/user/user.controller';
 import { AuthenticationMiddleware } from './common/middleware/authentication';
 
+/* eslint-disable @typescript-eslint/no-var-requires */
 require('dotenv').config();
 
 @Module({

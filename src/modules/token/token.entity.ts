@@ -6,7 +6,6 @@ import {
   Entity,
   ObjectID,
   ObjectIdColumn,
-  Timestamp,
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
