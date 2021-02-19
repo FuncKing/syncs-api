@@ -51,4 +51,8 @@ export class Token extends BaseEntity {
     this.value = encryption.hashed;
     this.expiredAt = now;
   }
+
+  isExpired(): boolean {
+    return new Date().getTime() > this.expiredAt.getTime() ? true : false;
+  }
 }

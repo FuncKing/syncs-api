@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { LoginUserDto, RegisterUserDto } from './dto';
 import { UserService } from '../user/user.service';
 import { TokenService } from '../token/token.service';
+import { User } from '../user/user.entity';
+import { Token } from '../token/token.entity';
 
 @Injectable()
 export class AuthenticationService {
@@ -10,7 +12,7 @@ export class AuthenticationService {
     private readonly tokenService: TokenService
   ) {}
 
-  async login(user: LoginUserDto): Promise<any> {
+  async login(user: LoginUserDto): Promise<Token> {
     const isExist = await this.userService.findOne({
       email: user.email,
     });
@@ -19,30 +21,30 @@ export class AuthenticationService {
       !isExist ||
       (isExist !== undefined ? !isExist.checkPassword(user.password) : false)
     ) {
-      return 'User not found!';
+      throw new HttpException(
+        {
+          error: 'User not found!',
+        },
+        HttpStatus.BAD_REQUEST
+      );
     }
     return await this.tokenService.create(isExist);
   }
 
-  async register(user: RegisterUserDto): Promise<any> {
+  async register(user: RegisterUserDto): Promise<User> {
     const isExist = await this.userService.findOne({ email: user.email });
     if (isExist) {
-      return 'User already exist!';
+      throw new HttpException(
+        {
+          error: 'User already exist!',
+        },
+        HttpStatus.FORBIDDEN
+      );
     }
     return await this.userService.create(user);
   }
 
-  async userInfo(tokenValue: string): Promise<any> {
-    const token = await this.tokenService.findOne({ value: tokenValue });
-    if (
-      !token ||
-      (token !== undefined
-        ? new Date().getTime() > token.expiredAt.getTime()
-        : false)
-    ) {
-      return 'User not found or you do not have a permission';
-    }
-    const user = await this.userService.findById(token.userId);
-    return user;
+  async userInfo(userId: string): Promise<User> {
+    return await this.userService.findById(userId);
   }
 }
