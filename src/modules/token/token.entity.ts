@@ -53,6 +53,6 @@ export class Token extends BaseEntity {
   }
 
   isExpired(): boolean {
-    return new Date().getTime() > this.expiredAt.getTime() ? true : false
+    return new Date().getTime() > this.expiredAt.getTime() ? true : false;
   }
 }

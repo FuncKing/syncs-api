@@ -2,6 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { LoginUserDto, RegisterUserDto } from './dto';
 import { UserService } from '../user/user.service';
 import { TokenService } from '../token/token.service';
+import {
+  UserNotFoundException,
+  UserAlreadyExistException,
+} from '../../common/exceptions';
+import { User } from '../user/user.entity';
+import { Token } from '../token/token.entity';
 
 @Injectable()
 export class AuthenticationService {
@@ -10,7 +16,7 @@ export class AuthenticationService {
     private readonly tokenService: TokenService
   ) {}
 
-  async login(user: LoginUserDto): Promise<any> {
+  async login(user: LoginUserDto): Promise<Token> {
     const isExist = await this.userService.findOne({
       email: user.email,
     });
@@ -19,27 +25,26 @@ export class AuthenticationService {
       !isExist ||
       (isExist !== undefined ? !isExist.checkPassword(user.password) : false)
     ) {
-      return 'User not found!';
+      throw new UserNotFoundException();
     }
     return await this.tokenService.create(isExist);
   }
 
-  async register(user: RegisterUserDto): Promise<any> {
+  async register(user: RegisterUserDto): Promise<User> {
     const isExist = await this.userService.findOne({ email: user.email });
     if (isExist) {
-      return 'User already exist!';
+      throw new UserAlreadyExistException();
     }
     return await this.userService.create(user);
   }
 
-  async userInfo(tokenValue: string): Promise<any> {
+  async userInfo(tokenValue: string): Promise<User> {
     const token = await this.tokenService.findOne({ value: tokenValue });
-    
-    if (
-      !token ||
-      (token !== undefined? token.isExpired() : false)
-      ) {
-      return 'User not found, token is expired or you do not have a permission';
+
+    if (!token || (token !== undefined ? token.isExpired() : false)) {
+      throw new UserNotFoundException(
+        ', token is expired or you do not have a permission'
+      );
     }
     const user = await this.userService.findById(token.userId);
     return user;

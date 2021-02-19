@@ -1,4 +1,5 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
+import { MiddlewareAccessException } from '../exceptions';
 import { TOKEN_KEY, WHITE_LIST } from 'src/constant/constant';
 import { TokenService } from 'src/modules/token/token.service';
 import { UserService } from 'src/modules/user/user.service';
@@ -31,12 +32,6 @@ export class AuthenticationMiddleware implements NestMiddleware {
       return next();
     }
 
-    res.writeHead(403, { 'content-type': 'application/json' });
-    res.write(
-      JSON.stringify({
-        message: 'You must be login to access here',
-      })
-    );
-    res.end();
+    throw new MiddlewareAccessException();
   }
 }
