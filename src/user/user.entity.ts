@@ -24,7 +24,7 @@ export class User {
 
   @Column()
   @ApiProperty({ example: 'asdasdasd90', description: 'encoded password' })
-  password_salt: string
+  password_salt: string;
 
   @Column()
   @ApiProperty({ example: 'true', description: 'paranoid delete bool' })
