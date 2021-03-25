@@ -1,12 +1,7 @@
 {
     "tables":{
         "3dc7f514-c9eb-4bdf-86dc-707c4f2d7e14":{
-            "id":"3dc7f514-c9eb-4bdf-86dc-707c4f2d7e14",
-            "visible":true,
             "name":"user",
-            "x":188,
-            "y":282,
-            "desc":"",
             "cols":[
                 {
                     "id":"11482381-ca68-454f-9e7e-d33261ef9de1",
@@ -111,27 +106,11 @@
                     ]
                 }
             ],
-            "indexes":[
-                
-            ],
-            "gHeight":142,
-            "gWidth":215,
-            "color":"#ffffff",
-            "background":"#03a9f4",
-            "resized":true,
-            "embeddable":false,
-            "validationLevel":"na",
-            "validationAction":"na",
-            "collation":"",
-            "others":""
+            "indexes":[],
         },
         "45ff044d-7bf7-42f3-9976-d857adbac1b3":{
             "id":"45ff044d-7bf7-42f3-9976-d857adbac1b3",
-            "visible":true,
             "name":"drive_plan",
-            "x":238,
-            "y":55,
-            "desc":"",
             "cols":[
                 {
                     "id":"8682f40d-7cac-4fb5-a3d4-4ba10e001084",
@@ -196,24 +175,9 @@
             "indexes":[
                 
             ],
-            "gHeight":88,
-            "gWidth":180,
-            "color":"#ffffff",
-            "background":"#03a9f4",
-            "resized":false,
-            "embeddable":false,
-            "validationLevel":"na",
-            "validationAction":"na",
-            "collation":"",
-            "others":""
         },
         "6ba9c506-310e-4f28-9004-f847f4b9414e":{
             "id":"6ba9c506-310e-4f28-9004-f847f4b9414e",
-            "visible":true,
-            "name":"file",
-            "x":570,
-            "y":341,
-            "desc":"",
             "cols":[
                 {
                     "id":"05d0e90e-d134-4dac-beb3-5622904a8af6",
@@ -365,24 +329,10 @@
             "indexes":[
                 
             ],
-            "gHeight":196,
-            "gWidth":252,
-            "color":"#ffffff",
-            "background":"#03a9f4",
-            "resized":true,
-            "embeddable":false,
-            "validationLevel":"na",
-            "validationAction":"na",
-            "collation":"",
-            "others":""
         },
         "b3ca8a9b-1e49-4a6a-95c5-f021640e66c1":{
             "id":"b3ca8a9b-1e49-4a6a-95c5-f021640e66c1",
-            "visible":true,
             "name":"folder",
-            "x":533,
-            "y":52,
-            "desc":"",
             "cols":[
                 {
                     "id":"1b254551-7c9f-4534-b2fa-cae1594adf64",
@@ -534,22 +484,11 @@
             "indexes":[
                 
             ],
-            "gHeight":196,
-            "gWidth":311,
-            "color":"#ffffff",
-            "background":"#03a9f4",
-            "resized":true,
-            "embeddable":false,
-            "validationLevel":"na",
-            "validationAction":"na",
-            "collation":"",
-            "others":""
         }
     },
     "relations":{
         "58cfe976-2c1e-4aca-b1a7-10a347c120d0":{
             "id":"58cfe976-2c1e-4aca-b1a7-10a347c120d0",
-            "visible":true,
             "name":"drive_plan-user",
             "desc":"",
             "type":"identifying",
@@ -644,41 +583,4 @@
             ]
         }
     },
-    "notes":{
-        
-    },
-    "lines":{
-        
-    },
-    "model":{
-        "name":"sync",
-        "id":"e261e0fb-8b64-4444-b7e5-6ae9e6924a19",
-        "desc":"",
-        "path":"",
-        "type":"MONGODB",
-        "version":1,
-        "keysgraphics":true,
-        "linegraphics":true,
-        "zoom":100,
-        "parentTableInFkCols":true,
-        "caseConvention":"under",
-        "replaceSpace":"_",
-        "color":"transparent",
-        "background":"transparent",
-        "sideSelections":true,
-        "isDirty":true,
-        "storedin":{
-            "major":2,
-            "minor":9,
-            "extra":1
-        },
-        "def_coltopk":true,
-        "def_validationLevel":"na",
-        "def_validationAction":"na",
-        "def_collation":"",
-        "def_others":""
-    },
-    "otherObjects":{
-        
-    }
 }
