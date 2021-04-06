@@ -38,12 +38,8 @@ export class File extends BaseEntity {
   @DeleteDateColumn({ type: 'timestamp', nullable: true, default: null })
   deletedAt: Date;
 
-  // constructor(ownerUser: string,file: any) {
-  //   super();
-    
-  //   this.ownerUser = ownerUser;
-  //   this.name = file.filename;
-  //   this.size = file.length;
-  //   this.path = `${new Date().getTime()}-${this.name}`;
-  // }
+  async delete(){
+    this.deletedAt = new Date();
+    await this.save();
+  }
 }

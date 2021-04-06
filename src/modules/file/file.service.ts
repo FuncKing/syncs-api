@@ -10,18 +10,12 @@ import { pipeline } from 'stream';
 import * as util from 'util';
 import { File } from './file.entity';
 import { Token } from '../token/token.entity';
-import { ObjectId } from 'mongodb';
+
 
 @Injectable()
 export class FileService {
 
   async getFileById(id: string, userId: string): Promise<File> {
-    try {
-      id = new ObjectId(id);
-    } catch (error) {
-      throw new HttpException('Invalid id', 400);
-    }
-
     const file = await File.findOne({
       where: {
         _id: id,
@@ -49,18 +43,10 @@ export class FileService {
     return { file };
   }
 
-  async getFile(id: any, accessToken: string): Promise<any> {
-    const { userId } = await Token.findOne({
-      value: accessToken
-    });
+  async getFile(id: any): Promise<Object> {
+    const file = await File.findOne(id);
 
-    if (!userId) {
-      throw new HttpException('Access token not found!', 401);
-    }
-
-    const file = await this.getFileById(id, userId);
-
-    if (!file) {
+    if (!file || file.deletedAt ) {
       throw new HttpException('File not found or you dont have permission!', 403);
     }
 
@@ -71,30 +57,34 @@ export class FileService {
     };
   }
 
-  async updateFile(id: string, accessToken: string, data: any): Promise<File> {
-    const { userId } = await Token.findOne({ value: accessToken });
+  async updateFile(id: string, data: any): Promise<File> {
 
-    if (!userId) {
-      throw new HttpException('Access token not found!', 401);
+    let file = await File.findOne(id);
+
+    if(!file || file.deletedAt ){
+      throw new HttpException('File not found or you dont have permission!', 403);
     }
 
-    const file = await this.getFileById(id, userId);
-    console.log(file);
-
     if (data.name) {
-
       data.path = file.path.replace(file.name, data.name);;
       fs.rename(`${__dirname.replace('dist/modules/file', '')}uploads/${file.path}`, `${__dirname.replace('dist/modules/file', '')}uploads/${data.path}`, (err) => {
         if (err)
           throw new HttpException(err, 404);
       });
       file.path = data.path // 'timestamp-filename'
-
     }
-    return await File.save({
-      id,
-      ownerUser: userId,
-      ...data
-    });
+    await File.update(file.id, { ...data });
+    return await File.findOne(file.id.toString());
+  }
+
+  async deleteFile(id: string): Promise<string> {   
+    const file = await File.findOne(id);
+    
+    if(!file || file.deletedAt ){
+      throw new HttpException('File not found or you dont have permission!', 403);
+    }
+
+    await file.delete()
+    return 'File deleted succesfully' 
   }
 }
