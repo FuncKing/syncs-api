@@ -8,7 +8,8 @@ import {
   Res,
   Put,
   Body,
-  Delete
+  Delete,
+  BadRequestException
 } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
 import { File } from './file.entity';
@@ -21,6 +22,10 @@ export class FileController {
   @Post('')
   async uploadFile(@Req() req): Promise<any> {
     const data = await req.file();
+    if(!data){
+      throw new BadRequestException('File not be empty');
+    }
+
     return this.fileService.uploadFile({
       ...data,
       userId: req.raw.user.id
@@ -32,6 +37,8 @@ export class FileController {
     await this.checkPermission(req.raw.user, id);
 
     const file = await this.fileService.getFile(id);
+    console.log(file);
+    
     return res.type(file['type']).send(file['file']);
   }
 
