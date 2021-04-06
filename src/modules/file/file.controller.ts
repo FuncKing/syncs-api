@@ -28,6 +28,10 @@ export class FileController {
       throw new BadRequestException('\'Content-Type\' must be \'multipart/form-data\' ');
     
     const data = await req.file();
+    if(!data){
+      throw new BadRequestException('File not be empty');
+    }
+
     return this.fileService.uploadFile({
       ...data,
       userId: req.raw.user.id
@@ -39,6 +43,8 @@ export class FileController {
     await this.checkPermission(req.raw.user.id, id);
 
     const file = await this.fileService.getFile(id);
+    console.log(file);
+    
     return res.type(file['type']).send(file['file']);
   }
 

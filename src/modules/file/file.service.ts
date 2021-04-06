@@ -29,12 +29,13 @@ export class FileService {
   async uploadFile(data: any): Promise<any> {
     const pump = util.promisify(pipeline)
 
+
     let file = new File();
     file.name = data.filename;
     file.ownerUser = data.userId;
     file.type = data.mimetype;
     file.path = `${new Date().getTime()}${Math.floor(Math.random() * 9999)}-${file.name}`;
-    file.size = 1000
+    file.size = data.file._readableState.length
 
     await pump(data.file, fs.createWriteStream(`uploads/${file.path}`))
     await file.save();
@@ -47,9 +48,10 @@ export class FileService {
     if (!file || file.deletedAt ) {
       throw new HttpException('File not found or you dont have permission!', 403);
     }
-
+    
     const stream = fs.createReadStream(`${__dirname.replace('dist/modules/file', '')}uploads/${file.path}`)
     return {
+      entity: file,
       file: stream,
       type: file.type
     };
