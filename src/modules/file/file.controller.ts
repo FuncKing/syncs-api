@@ -2,13 +2,15 @@ import {
   Controller,
   Get,
   HttpException,
+  Headers,
   Param,
   Post,
   Req,
   Res,
   Put,
   Body,
-  Delete
+  Delete,
+  BadRequestException
 } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
 
@@ -21,7 +23,10 @@ export class FileController {
   constructor(private fileService: FileService) { }
 
   @Post('')
-  async uploadFile(@Req() req): Promise<any> {
+  async uploadFile(@Req() req, @Headers('Content-Type') contentType): Promise<any> {
+    if(contentType.indexOf("multipart/form-data") === -1)
+      throw new BadRequestException('\'Content-Type\' must be \'multipart/form-data\' ');
+    
     const data = await req.file();
     return this.fileService.uploadFile({
       ...data,

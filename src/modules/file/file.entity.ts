@@ -32,7 +32,7 @@ export class File extends BaseEntity {
   @Column()
   type: string;
 
-  @Column({ nullable: true, default: null })
+  @Column({ nullable: true, default: [] })
   @Type(() => SharedUsers)
   sharedUsers: SharedUsers[];
 
