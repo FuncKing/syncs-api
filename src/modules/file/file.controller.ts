@@ -11,6 +11,8 @@ import {
   Delete
 } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
+
+import { FileUploadDTO } from './dto/fileUpdate';
 import { File } from './file.entity';
 import { FileService } from './file.service';
 
@@ -29,40 +31,43 @@ export class FileController {
 
   @Get('/:id')
   async getFile(@Req() req, @Res() res, @Param('id') id: string): Promise<any> {
-    await this.checkPermission(req.raw.user, id);
+    await this.checkPermission(req.raw.user.id, id);
 
     const file = await this.fileService.getFile(id);
     return res.type(file['type']).send(file['file']);
   }
 
   @Put('/:id',)
-  async updateFile(@Req() req, @Body() body: any, @Param('id') id: string): Promise<any> {
-    await this.checkPermission(req.raw.user, id);
-
+  async updateFile(@Req() req,@Body() body: FileUploadDTO, @Param('id') id: string): Promise<any> {   
+    await this.checkPermission(req.raw.user.id, id);
+  
     return await this.fileService.updateFile(id, body);
   }
 
   @Delete('/:id')
   async deleteFile(@Req() req, @Param('id') id: string): Promise<any>{
-    await this.checkPermission(req.raw.user, id);
+    await this.checkPermission(req.raw.user.id, id);
     return {
       message: await this.fileService.deleteFile(id)
     }
   }
 
-  async checkPermission(user, id: any): Promise<void> {   
+  async checkPermission(userId, id: any): Promise<boolean> {   
     try {
       id = new ObjectId(id);
-    } catch (error) {
-      console.log('error,', error);
-      
+    } catch (error) {      
       throw new HttpException('Invalid id', 400);
     }
-
     const file = await File.findOne(id)
+    
+    if(!file)
+    throw new HttpException('File not found or you dont have a permission', 403);
 
-    if (file.ownerUser.toString() != user.id.toString()){
-      throw new HttpException('File not found or you dont have a permission', 403);
+    const isSharedUser = file.sharedUsers.filter(u => { return u.userId == userId });
+    
+    if (file.ownerUser.toString() === userId.toString() || isSharedUser.length !== 0 ){
+      return true;
     }
+    throw new HttpException('File not found or you dont have a permission', 403);
   }
 }

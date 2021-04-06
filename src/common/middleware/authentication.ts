@@ -28,8 +28,8 @@ export class AuthenticationMiddleware implements NestMiddleware {
         req.user = user;
       }
     }
-    
-    if (is_ignored || req.user) {    
+
+    if (is_ignored || req.user) {
       return next();
     }
 

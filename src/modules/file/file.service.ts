@@ -1,7 +1,5 @@
-import * as fastify from 'fastify'
 import {
   HttpException,
-  BadRequestException,
   Injectable,
 } from '@nestjs/common';
 
@@ -9,7 +7,7 @@ import * as fs from 'fs';
 import { pipeline } from 'stream';
 import * as util from 'util';
 import { File } from './file.entity';
-import { Token } from '../token/token.entity';
+import { FileUploadDTO } from './dto/fileUpdate';
 
 
 @Injectable()
@@ -57,23 +55,24 @@ export class FileService {
     };
   }
 
-  async updateFile(id: string, data: any): Promise<File> {
+  async updateFile(id: string, data: FileUploadDTO): Promise<File> {
 
     let file = await File.findOne(id);
 
     if(!file || file.deletedAt ){
       throw new HttpException('File not found or you dont have permission!', 403);
     }
-
+    
     if (data.name) {
-      data.path = file.path.replace(file.name, data.name);;
-      fs.rename(`${__dirname.replace('dist/modules/file', '')}uploads/${file.path}`, `${__dirname.replace('dist/modules/file', '')}uploads/${data.path}`, (err) => {
+      const oldPath = file.path
+      const newPath = file.path.replace(file.name, data.name);
+      fs.rename(`${__dirname.replace('dist/modules/file', '')}uploads/${oldPath}`, `${__dirname.replace('dist/modules/file', '')}uploads/${newPath}`, (err) => {
         if (err)
           throw new HttpException(err, 404);
       });
-      file.path = data.path // 'timestamp-filename'
+      file.path = newPath // 'timestamp-filename'
     }
-    await File.update(file.id, { ...data });
+    await File.update(file.id, data);
     return await File.findOne(file.id.toString());
   }
 

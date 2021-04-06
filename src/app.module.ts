@@ -31,7 +31,7 @@ require('dotenv').config();
     UserModule,
     AuthenticationModule,
     TokenModule,
-    FileModule
+    FileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

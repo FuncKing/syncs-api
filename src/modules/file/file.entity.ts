@@ -8,6 +8,9 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
 } from 'typeorm';
+import { Type } from 'class-transformer';
+
+import { SharedUsers } from './dto/sharedUsers';
 
 @Entity()
 export class File extends BaseEntity {
@@ -24,10 +27,14 @@ export class File extends BaseEntity {
   size: number;
 
   @Column()
-  path: string
+  path: string;
 
   @Column()
-  type: string
+  type: string;
+
+  @Column({ nullable: true, default: null })
+  @Type(() => SharedUsers)
+  sharedUsers: SharedUsers[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
@@ -38,7 +45,7 @@ export class File extends BaseEntity {
   @DeleteDateColumn({ type: 'timestamp', nullable: true, default: null })
   deletedAt: Date;
 
-  async delete(){
+  async delete() {
     this.deletedAt = new Date();
     await this.save();
   }
