@@ -11,7 +11,7 @@ import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user';
 
 @ApiBearerAuth()
-@ApiTags('user')
+@ApiTags('/user')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -23,7 +23,7 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get(':id')
+  @Get('/:id')
   @ApiResponse({
     status: 200,
     description: 'The found record',

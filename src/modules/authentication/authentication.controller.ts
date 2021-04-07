@@ -4,21 +4,21 @@ import { User } from '../user/user.entity';
 import { LoginUserDto, RegisterUserDto } from './dto';
 import { Token } from '../token/token.entity';
 
-@Controller('authentications')
+@Controller('/authentications')
 export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
 
-  @Post('login')
+  @Post('/login')
   login(@Body() user: LoginUserDto): Promise<Token> {
     return this.authenticationService.login(user);
   }
 
-  @Post('register')
+  @Post('/register')
   register(@Body() user: RegisterUserDto): Promise<User> {
     return this.authenticationService.register(user);
   }
 
-  @Get('me')
+  @Get('/me')
   getUser(@Request() req): Promise<User> {
     return this.authenticationService.userInfo(req.user);
   }

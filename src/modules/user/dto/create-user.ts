@@ -1,9 +1,9 @@
-import * as AllValidator from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 export class CreateUserDto {
-  @AllValidator.IsString()
+  @IsEmail()
   readonly email: string;
 
-  @AllValidator.IsString()
+  @IsString()
   readonly password: string;
 }

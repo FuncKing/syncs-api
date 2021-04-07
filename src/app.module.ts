@@ -13,6 +13,8 @@ import { AuthenticationModule } from './modules/authentication/authentication.mo
 import { TokenModule } from './modules/token/token.module';
 import { Token } from './modules/token/token.entity';
 import { AuthenticationMiddleware } from './common/middleware/authentication';
+import { FileModule } from './modules/file/file.module';
+import { File } from './modules/file/file.entity';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 require('dotenv').config();
@@ -24,11 +26,12 @@ require('dotenv').config();
       host: process.env.DATABASE_HOST,
       database: process.env.DATABASE,
       synchronize: process.env.DATABASE_SYNCHRONIZE.toLowerCase() === 'true',
-      entities: [User, Token],
+      entities: [User, Token, File],
     }),
     UserModule,
     AuthenticationModule,
     TokenModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

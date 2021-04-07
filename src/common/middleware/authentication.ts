@@ -3,6 +3,7 @@ import { MiddlewareAccessException } from '../exceptions';
 import { TOKEN_KEY, WHITE_LIST } from 'src/constant/constant';
 import { TokenService } from 'src/modules/token/token.service';
 import { UserService } from 'src/modules/user/user.service';
+import { User } from 'src/modules/user/user.entity';
 
 @Injectable()
 export class AuthenticationMiddleware implements NestMiddleware {
